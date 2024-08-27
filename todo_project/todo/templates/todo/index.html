@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: scale(0.98); /* Initial slight zoom-out */
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: scale(1); /* Zoom in on hover */
+        }
+
+        h1 {
+            color: #00796b;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: slideIn 1s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #00796b;
+            border-radius: 50px;
+            width: 70%;
+            margin-right: 10px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: #004d40;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius:50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .add-btn {
+            background-color: #00796b;
+            color: white;
+        }
+
+        .add-btn:hover {
+            background-color: #004d40;
+            transform: translateY(-5px); /* Slight lift effect */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .delete-btn {
+            background: linear-gradient(135deg, #e57373, #d32f2f); /* Gradient background */
+            color: white;
+            margin-left: 10px;
+            font-size: 0.9em;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            padding: 8px 15px;
+            border-radius: 50px;
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: linear-gradient(135deg, #d32f2f, #b71c1c); /* Darker gradient on hover */
+            transform: translateY(-5px); /* Slight lift effect */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        li {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transform: translateY(-10px);
+            opacity: 0;
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { transform: translateY(0); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="title" placeholder="Enter a new task">
+            <button type="submit" class="add-btn">Add </button>
+        </form>
+
+        <ul>
+            {% for task in tasks %}
+                <li>
+                    {{ task.title }}
+                    <a href="{% url 'delete_task' task.id %}" class="delete-btn">Delete</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
